@@ -4,24 +4,24 @@ import { View, Text, StyleSheet } from 'react-native';
 const Compass = () => {
   return (
     <View style={styles.compassContainer}>
-      {/* Indicador de dirección (puntos cardinales) */}
+   
       <Text style={[styles.directionText, styles.northText]}>N</Text>
       <Text style={[styles.directionText, styles.southText]}>S</Text>
       <Text style={[styles.directionText, styles.eastText]}>E</Text>
       <Text style={[styles.directionText, styles.westText]}>W</Text>
 
-      {/* Indicador de dirección (puntos intercardinales) */}
+    
       <Text style={[styles.directionText, styles.northeastText]}>NE</Text>
       <Text style={[styles.directionText, styles.northwestText]}>NW</Text>
       <Text style={[styles.directionText, styles.southeastText]}>SE</Text>
       <Text style={[styles.directionText, styles.southwestText]}>SW</Text>
 
-      {/* Aguja de la brújula */}
+   
       <View style={styles.needleContainer}>
         <View style={styles.needle} />
       </View>
 
-      {/* Círculo exterior con marcas de grados */}
+    
       <View style={styles.degreeMarkers}>
         {[...Array(36)].map((_, i) => (
           <View key={i} style={styles.degreeMark(i * 10)}>
