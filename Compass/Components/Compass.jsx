@@ -1,34 +1,54 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
 
 const Compass = () => {
+  const [directionCode, setDirectionCode] = useState('');
+  const [rotation, setRotation] = useState(0);
+
+  const directionMap = {
+    '000': 0,    
+    '001': 45,   
+    '010': 90,   
+    '011': 135,  
+    '100': 180,  
+    '101': 225,  
+    '110': 270,  
+    '111': 315,  
+  };
+
+  const handleDirectionChange = (code) => {
+    setDirectionCode(code);
+
+    if (directionMap.hasOwnProperty(code)) {
+      setRotation(directionMap[code]);
+    } else {
+      setRotation(0);
+    }
+  };
+
   return (
     <View style={styles.compassContainer}>
-   
       <Text style={[styles.directionText, styles.northText]}>N</Text>
       <Text style={[styles.directionText, styles.southText]}>S</Text>
       <Text style={[styles.directionText, styles.eastText]}>E</Text>
       <Text style={[styles.directionText, styles.westText]}>W</Text>
-
-    
       <Text style={[styles.directionText, styles.northeastText]}>NE</Text>
       <Text style={[styles.directionText, styles.northwestText]}>NW</Text>
       <Text style={[styles.directionText, styles.southeastText]}>SE</Text>
       <Text style={[styles.directionText, styles.southwestText]}>SW</Text>
 
-   
-      <View style={styles.needleContainer}>
+      <View style={[styles.needleContainer, { transform: [{ rotate: `${rotation}deg` }] }]}>
         <View style={styles.needle} />
       </View>
 
-    
-      <View style={styles.degreeMarkers}>
-        {[...Array(36)].map((_, i) => (
-          <View key={i} style={styles.degreeMark(i * 10)}>
-            <Text style={styles.degreeText}>{i * 10}</Text>
-          </View>
-        ))}
-      </View>
+      <TextInput
+        style={styles.input}
+        placeholder="Ingresa el código binario"
+        value={directionCode}
+        onChangeText={handleDirectionChange}
+        keyboardType="numeric"
+        maxLength={3}
+      />
     </View>
   );
 };
@@ -75,23 +95,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
   },
-  degreeMarkers: {
+  input: {
     position: 'absolute',
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  degreeMark: (rotation) => ({
-    position: 'absolute',
-    transform: [{ rotate: `${rotation}deg` }],
-    justifyContent: 'center',
-    alignItems: 'center',
-  }),
-  degreeText: {
-    fontSize: 10,
-    color: '#bbb',
-    position: 'absolute',
-    top: 5,
+    bottom: -50,
+    width: 200,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#888',
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    textAlign: 'center',
   },
 });
