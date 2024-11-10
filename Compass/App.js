@@ -13,10 +13,7 @@ export default App = () => {
         footer={<Footer text="Nombre de alumnos y asesor" />}
         style={styles.card}
       >
-        {/* Aquí va el diseño de la brújula o cualquier componente central */}
-        <View style={styles.compass}>
-          <Text style={styles.compassText}>🧭 Brújula</Text>
-        </View>
+       <Compass/>
       </Card>
     </View>
   );
