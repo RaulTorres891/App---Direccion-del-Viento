@@ -10,10 +10,8 @@ export default App = () => {
       <Card 
         header={<Header text="Direccion del viento" />}
         footer={<Footer text="Nombre de alumnos y asesor" />}
-        style={styles.card}
-      >
-        {/* Aquí va el diseño de la brújula o cualquier componente central */}
-        <View style={styles.compass}>
+        style={styles.card}>        
+        <View style={styles.compass}> {/* De este view al otro view se añade la brujula */}
           <Text style={styles.compassText}>🧭 Brújula</Text>
         </View>
       </Card>
@@ -29,7 +27,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   card: {
-    height: 830, 
+    height: 830, //Este es el tamaño de la carta
   },
   compass: {
     alignItems: 'center',
