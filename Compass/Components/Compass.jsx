@@ -41,14 +41,14 @@ const Compass = () => {
         <View style={styles.needle} />
       </View>
 
-      <TextInput
+      {/* <TextInput
         style={styles.input}
         placeholder="Ingresa el código binario"
         value={directionCode}
         onChangeText={handleDirectionChange}
         keyboardType="numeric"
         maxLength={3}
-      />
+      /> */}
     </View>
   );
 };
