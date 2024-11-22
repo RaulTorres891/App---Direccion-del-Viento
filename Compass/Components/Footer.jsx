@@ -17,6 +17,6 @@ const styles = StyleSheet.create({
       txt: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#252525',
+        color: '#fff',
       },
 });

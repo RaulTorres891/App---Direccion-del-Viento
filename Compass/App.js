@@ -1,46 +1,58 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import axios from 'axios';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
-import Card from './Components/Card';
 import Compass from './Components/Compass';
+// import {socket} from './socket';
 
 export default App = () => {
-  const [data, setData] = useState(''); 
+  const [data, setData] = useState('');
+  const [connected, setConnected] = useState(false);
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get('http://172.17.218.107:8081/data'); 
-      setData(response.data); 
-    } catch (error) {
-      console.error("Error al conectar con ESP8266:", error.message);
-      if (error.response) {
-        console.error("Respuesta del servidor:", error.response.data);
-        console.error("Código de estado:", error.response.status);
-      } else if (error.request) {
-        console.error("No se recibió respuesta:", error.request);
-      }
-    }
-    
-  };
+  //Alternativa el useEffect principal
+  // useEffect(() => {
+  //   socket.on('message', (mensaje) => console.log('Dato recibido: ', mensaje))
+  // }, [])
 
   useEffect(() => {
-    fetchData(); 
+
+    const ws = new WebSocket('ws://192.168.4.1:8081');
+
+    ws.onopen = () => {
+      console.log('Conectado al servidor WebSocket');
+      setConnected(true);
+    };
+
+    ws.onmessage = (event) => {
+      console.log('Mensaje recibido:', event.data);
+      setData(event.data); 
+    };
+
+    ws.onclose = () => {
+      console.log('Desconectado del servidor WebSocket');
+      setConnected(false);
+    };
+
+    ws.onerror = (error) => {
+      console.error('Error en WebSocket:', error.message);
+    };
+
+    return () => ws.close();
   }, []);
 
   return (
     <View style={styles.container}>
-      <Card
-        header={<Header text="Dirección del viento" />}
-        footer={<Footer text="Nombre de alumnos y asesor" />}
-        style={styles.card}
-      >
-        <Compass />
-        <Text style={styles.dataText}>
-          {data ? `Datos del ESP8266: ${data}` : "Conectando..."}
-        </Text>
-      </Card>
+      <Header text="Dirección del viento" style={styles.header} />
+     {
+      connected && 
+      <Compass directionCode={data} />
+     } 
+      <Text style={styles.dataText}>
+        {connected
+          ? `Datos del ESP8266: ${data || 'Esperando datos...'}`
+          : 'Conectando al servidor WebSocket...'}
+      </Text>
+      <Footer text="Creadores y asesores:" style={styles.footer} />
     </View>
   );
 };
@@ -50,15 +62,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#252525',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 20,
   },
-  card: {
-    height: 830,
-  },
-  dataText: {
-    color: '#252525',
-    fontSize: 16,
-    marginTop: 20,
-  },
+  header: { marginTop: 10 },
+  footer: { marginBottom: 10 },
+  dataText: { color: '#fff', fontSize: 16, marginTop: 20 },
 });
 
